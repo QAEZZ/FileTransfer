@@ -1,6 +1,7 @@
 package dev.qaezz;
 
 import java.net.SocketException;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,7 +15,8 @@ public class Main {
             case "listen":
                 Listener listener = new Listener();
                 try {
-                    listener.Listen();
+                    boolean overwrite = args.length > 1 && Objects.equals(args[1], "--overwrite");
+                    listener.Listen(overwrite);
                 } catch(SocketException e) {
                     System.out.println("There was an error with the socket: " + e.getMessage());
                     return;
@@ -24,11 +26,10 @@ public class Main {
             case "send":
                 String file = args[1];
                 String[] targetInfo = args[2].split(":");
-                String targetAdress = targetInfo[0];
+                String targetAddress = targetInfo[0];
                 String targetPath = targetInfo[1];
 
-                System.out.println(file + "\n" + targetAdress + "\n" + targetPath);
-                Sender sender = new Sender(targetAdress, file, targetPath);
+                Sender sender = new Sender(targetAddress, file, targetPath);
                 sender.Send();
                 break;
 
